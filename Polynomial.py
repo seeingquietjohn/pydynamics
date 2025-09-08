@@ -53,6 +53,9 @@ class Polynomial :
         
         return Polynomial(new_coeffs)
     
+    def __neg__(self): 
+        return Polynomial(-self.coeffs)
+    
     def __sub__(self, g):
         if not isinstance(g, Polynomial):
             raise ValueError("Can only add Polynomial to Polynomial")
@@ -94,7 +97,21 @@ class Polynomial :
         P_conj = P_shifted.add_constant(b).multiply_by_constant(a)
         
         return P_conj
-
-
+    
+    def monic_centered(self): 
+        d = self.degree()
+        if d == 0: 
+            return self
+        lc = self.coeffs[0]
+        if lc == 0:
+            raise ValueError("LC cannot be zero!")
+        P_monic = self.multiply_by_constant(1/lc)
+        if d == 1:
+            return P_monic
+        a = P_monic.coeffs[1]
+        b = a/(d)
+        P_mc = P_monic.affine_conjugate(1, b)
+        
+        return P_mc
 
     
